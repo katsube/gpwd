@@ -4,7 +4,7 @@ Generate password tool with [node.js](http://nodejs.org) command-line interfaces
 
 ## Installation
 ```shellsession
-$ npm install --save gpwd
+$ npm install -g gpwd
 ```
 
 ## Option

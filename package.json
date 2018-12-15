@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Generate password at CLI",
   "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "gpwd": "index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +14,12 @@
     "type": "git",
     "url": "git+https://github.com/katsube/gpw.git"
   },
+  "keywords": [
+    "password",
+    "generate",
+    "CLI",
+    "command"
+  ],
   "author": "Makito Katsube <katsubemakito@gmail.com> (http://github.com/katsube)",
   "license": "MIT",
   "bugs": {

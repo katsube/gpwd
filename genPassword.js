@@ -5,7 +5,9 @@
  * @license MIT
  */
 
+'use strict';
 module.exports = class genPassword {
+
 	/**
 	 * constructors
 	 *
@@ -15,6 +17,20 @@ module.exports = class genPassword {
 	constructor(opt){
 		this.passwd = null;
 		this.opt    = opt;
+	}
+
+
+	/**
+	 * 最小文字列長
+	 */
+	static get MIN_LENGTH(){
+		return(1);
+	}
+	/**
+	 * 最大文字列長
+	 */
+	static get MAX_LENGTH(){
+		return(65536);
 	}
 
 	/**
@@ -52,6 +68,8 @@ module.exports = class genPassword {
 
 	/**
 	 * make base string
+	 *
+	 * @access private
 	 */
 	_basestring(){
 		let str = "";

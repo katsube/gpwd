@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/katsube/gpw/issues"
   },
-  "homepage": "https://github.com/katsube/gpw#readme"
+  "homepage": "https://github.com/katsube/gpw#readme",
+  "dependencies": {
+    "commander": "^2.19.0"
+  }
 }

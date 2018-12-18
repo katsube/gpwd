@@ -16,8 +16,18 @@ const PATTERN = {
 };
 
 test('static XXX_LENGTH', () => {
-  expect(genPassword.MIN_LENGTH).toBeGreaterThanOrEqual(1);
-  expect(genPassword.MAX_LENGTH).toBeLessThanOrEqual(65536);
+	expect(genPassword.MIN_LENGTH).toBeGreaterThanOrEqual(1);
+	expect(genPassword.MAX_LENGTH).toBeLessThanOrEqual(65536);
+});
+
+test('password echo', () => {
+	const spyLog = jest.spyOn(console, 'log')
+	spyLog.mockImplementation(x => x)
+
+	const passwd = new genPassword();
+	passwd.echo();
+	expect(console.log).toBeCalled();
+	expect(spyLog.mock.calls[0][0]).toBe(passwd.get());
 });
 
 test('password length', () => {

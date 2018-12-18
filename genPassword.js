@@ -14,9 +14,18 @@ module.exports = class genPassword {
 	 * @param {Object} opt
 	 * @return void
 	 */
-	constructor(opt){
+	constructor(opt=null){
 		this.passwd = null;
-		this.opt    = opt;
+
+		if(opt === null){
+			this.opt = {
+				  length: 8
+				, strength: "NORMAL"
+			};
+		}
+		else{
+			this.opt = opt;
+		}
 	}
 
 
@@ -75,7 +84,7 @@ module.exports = class genPassword {
 		let str = "";
 		switch(this.opt.strength){
 			case "GOD":
-				str += "!\"#$%&'()*,;<=>?@\[]^`{|}~";
+				str += "!\"#$%&'()*,;<=>?@[]^`{|}~";
 			case "STRONG":
 				str += ".+/";
 			case "NORMAL":

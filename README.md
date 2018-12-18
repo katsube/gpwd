@@ -43,7 +43,7 @@ OslE&p=OgsaCYg)
 | weak    | `abcdefghijklmnopqrstuvwxyz` |
 | normal  | weak + `ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_` |
 | strong  | normal + `.+/` |
-| god     | strong + `!"#$%&'()*,;<=>?@\[]^``{|}~` |
+| god     | strong + `!"#$%&'()*,;<=>?@[]^``{|}~` |
 
 
 ### -i, --item

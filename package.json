@@ -8,7 +8,7 @@
     "gpwd": "index.js"
   },
   "scripts": {
-	  "test": "jest"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/katsube/gpw#readme",
   "dependencies": {
-    "commander": "^2.19.0"
+    "commander": "^2.20.0"
   },
   "devDependencies": {
-    "jest": "^23.6.0"
+    "jest": "^24.8.0"
   }
 }

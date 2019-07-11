@@ -30,13 +30,13 @@ module.exports = class genPassword {
 
 
 	/**
-	 * 最小文字列長
+	 * minimum password length
 	 */
 	static get MIN_LENGTH(){
 		return(1);
 	}
 	/**
-	 * 最大文字列長
+	 * maximum password length
 	 */
 	static get MAX_LENGTH(){
 		return(65536);

@@ -1,12 +1,21 @@
 /**
  * Test for genPassword.js
+ *
+ * Author: M.katsube
  */
 
+//--------------------------------------
+// Module
+//--------------------------------------
 const genPassword = require('../genPassword');
+
+//--------------------------------------
+// Test data
+//--------------------------------------
 const LEN = [
-	32
-  , genPassword.MAX_LENGTH
-  , genPassword.MIN_LENGTH
+	  32
+	, genPassword.MAX_LENGTH
+	, genPassword.MIN_LENGTH
 ];
 const PATTERN = {
 			WEAK: /^[a-z]*$/
@@ -15,6 +24,9 @@ const PATTERN = {
 		,    GOD: /^[a-zA-Z0-9_.+/!"#$%&'()*,;<=>?@\[\]^`{|}~]*$/
 };
 
+//--------------------------------------
+// Test
+//--------------------------------------
 test('static XXX_LENGTH', () => {
 	expect(genPassword.MIN_LENGTH).toBeGreaterThanOrEqual(1);
 	expect(genPassword.MAX_LENGTH).toBeLessThanOrEqual(65536);

@@ -11,17 +11,17 @@
 //--------------------------------------
 // Module
 //--------------------------------------
-let genPassword = require("./genPassword");
-let program     = require('commander');
+const genPassword = require("./genPassword");
+const program     = require('commander');
 
 //--------------------------------------
 // commander
 //--------------------------------------
 program
   .version("1.0.0")
-  .option('-l, --length [bytes]', 'string length [bytes]', 8)
+  .option('-l, --length [bytes]',  'string length [bytes]', 8)
   .option('-s, --strength [mode]', 'string strength [god|strong|normal|weak]', 'normal')
-  .option('-i, --item [number]', 'how many generate [number]', 1)
+  .option('-i, --item [number]',   'how many generate [number]', 1)
   .parse(process.argv);
 
 //--------------------------------------
@@ -46,7 +46,7 @@ if( ! (1 <= Number(program.item) && Number(program.item) <= 65536) ){
 //--------------------------------------
 // Generate password
 //--------------------------------------
-let passwd = new genPassword({
+const passwd = new genPassword({
 					  "length": Number(program.length)
 					, "strength": program.strength.toUpperCase()
 				});

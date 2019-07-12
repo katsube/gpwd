@@ -11,11 +11,29 @@ module.exports = class genPassword {
   /**
    * constructors
    *
-   * @param {Object} opt
-   * @return void
+   * @constructor
+   * @param {object} opt option value {length:8, strength:"normal"}
+   * @returns {void}
    */
   constructor(opt=null){
     this.passwd = null;
+    this.basestring = {
+      alpha: "abcdefghijklmnopqrstuvwxyz",
+      ALPHA: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      Alpha: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      alnum: "abcdefghijklmnopqrstuvwxyz0123456789",
+      ALnum: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      Alnum: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        num: "0123456789",
+       char1: ".-_",
+       char2: "+/!\"#$%&'()*,;<=>?@[]^`{|}~",
+      base64: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/+=",
+
+         god: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_+/!\"#$%&'()*,;<=>?@[]^`{|}~",
+      strong: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_",
+      normal: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        weak: "abcdefghijklmnopqrstuvwxyz"
+    };
 
     if(opt === null){
       this.opt = {
@@ -43,7 +61,26 @@ module.exports = class genPassword {
   }
 
   /**
+   * setter this.option
+   *
+   * @param {object} option value {length:8, strength:"normal"}
+   * @returns {void}
+   */
+  setOption(opt){
+    if( ("length" in opt) && (typeof(opt.length) === "number") ){
+      this.opt.length = opt.length;
+    }
+    if( ("strength" in opt) && (typeof(opt.strength) === "string") ){
+      if( this.existsStrength(opt.strength) ){
+        this.opt.strength = opt.strength;
+      }
+    }
+  }
+
+  /**
    * echo password
+   * 
+   * @returns {void}
    */
   echo(){
     console.log(this.passwd);
@@ -51,6 +88,8 @@ module.exports = class genPassword {
 
   /**
    * return password
+   *
+   * @returns {string}
    */
   get(){
     return(this.passwd);
@@ -59,10 +98,10 @@ module.exports = class genPassword {
   /**
    * Generate password
    *
-   * @return Object
+   * @returns {object}
    */
   gen(){
-    let base = this._basestring();
+    let base = this._getBasestring();
     let len  = this.opt.length;
     let str  = "";
 
@@ -76,26 +115,29 @@ module.exports = class genPassword {
   }
 
   /**
-   * make base string
-   *
-   * @access private
+   * check exists strength
+   * 
+   * @param {string} strength
+   * @returns {boolean}
    */
-  _basestring(){
-    let str = "";
-    switch(this.opt.strength){
-      case "GOD":
-        str += "!\"#$%&'()*,;<=>?@[]^`{|}~";
-      case "STRONG":
-        str += ".+/";
-      case "NORMAL":
-        str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        str += "0123456789";
-        str += "_";
-      case "WEAK":
-      default:
-        str += "abcdefghijklmnopqrstuvwxyz";
-    }
+  existsStrength(strength){
+    return( strength in this.basestring );
+  }
 
-    return(str);
+  /**
+   * get basestring
+   *
+   * @private
+   * @returns {string}
+   */
+  _getBasestring(){
+    const strength = this.opt.strength;
+
+    if( this.existsStrength( strength ) ){
+      return( this.basestring[strength] );
+    }
+    else{
+      return( this.basestring.normal );
+    }
   }
 }

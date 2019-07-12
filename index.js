@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+"use strict";
 
 /**
  * Generate Password
@@ -9,19 +9,26 @@
  */
 
 //--------------------------------------
+// Constant
+//--------------------------------------
+const MIN_ITEM = 1;
+const MAX_ITEM = 65534;
+
+//--------------------------------------
 // Module
 //--------------------------------------
 const genPassword = require("./genPassword");
-const program     = require('commander');
+const program = require("commander");
+const passwd  = new genPassword();
 
 //--------------------------------------
 // commander
 //--------------------------------------
 program
-  .version("1.0.0")
-  .option('-l, --length [bytes]',  'string length [bytes]', 8)
-  .option('-s, --strength [mode]', 'string strength [god|strong|normal|weak]', 'normal')
-  .option('-i, --item [number]',   'how many generate [number]', 1)
+  .version("1.1.0")
+  .option("-l, --length [bytes]",  "string length [bytes]", 8)
+  .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more", "strong")
+  .option("-i, --item [number]",   "how many generate [number]", 1)
   .parse(process.argv);
 
 //--------------------------------------
@@ -31,25 +38,25 @@ if( ! Number.isInteger( Number(program.length) ) ){
   error("-l, --length option is only integer.");
 }
 if( ! (genPassword.MIN_LENGTH <= Number(program.length) && Number(program.length) <= genPassword.MAX_LENGTH) ){
-  error("-l, --length option is need between "+genPassword.MIN_LENGTH+" to "+genPassword.MAX_LENGTH);
+  error(`-l, --length option is need between ${genPassword.MIN_LENGTH} to ${genPassword.MAX_LENGTH}`);
 }
-if( ! program.strength.match(/^(god|strong|normal|weak)$/i) ){
-  error("-s, --strength option is [god|strong|normal|weak]");
+if( ! passwd.existsStrength(program.strength) ){
+  error("-s, --strength option is [god|strong|normal|weak] and more.");
 }
 if( ! Number.isInteger( Number(program.item) ) ){
   error("-i, --item option is only integer.");
 }
-if( ! (1 <= Number(program.item) && Number(program.item) <= 65536) ){
-  error("-l, --length option is need between 1 to 65536");
+if( ! (MIN_ITEM <= Number(program.item) && Number(program.item) <= MAX_ITEM) ){
+  error(`-l, --length option is need between ${MIN_ITEM} to ${MAX_ITEM}`);
 }
 
 //--------------------------------------
 // Generate password
 //--------------------------------------
-const passwd = new genPassword({
-            "length": Number(program.length)
-          , "strength": program.strength.toUpperCase()
-        });
+passwd.setOption({
+    length: Number(program.length),
+  strength: program.strength
+});
 
 for(let i=0; i<program.item; i++){
   passwd
@@ -61,7 +68,8 @@ for(let i=0; i<program.item; i++){
 /**
  * Display Error and exit
  *
- * @param {string} str
+ * @param {string} str error message
+ * @returns {void}
  */
 function error(str){
   console.error("[Error] " + str);

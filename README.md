@@ -3,63 +3,83 @@
 Generate password tool with [node.js](http://nodejs.org) command-line interfaces.
 
 ## Installation
-```shellsession
+```
 $ npm install -g gpwd
 ```
 
-## Option
+## Usage
+### Basic
+Generate random 8byte string.
+```
+$ gpwd
+Zqp3Lz4I
+```
 
+## Option
 ### -l, --length
 String length option. between 1 to 65536 bytes. Default is 8 bytes.
-```shellsession
+```
 $ gpwd -l 16
-EUMYbMvcyAI4xpO3
+f2U52CjrPjlcYgyO
 
 $ gpwd -l 128
-Z5idYVnl1TJm2RBB6Zga66dbeMFrvk8qEYnXt8B6A5xNy3KrQRQiccJ42X1YhYzP1ythFAMevCM4nMMriRCLMpMJHPb8QkHRcLDs8X1QrP1UPZqQDrN64Plw9FaivW1C
+Pe7cvIASKFK-WmY4oW7WuH3f7qsNROHUYE-zZuLd1GdvjV13-Cjx5B6kdVMlhZGvn2-QFEdn.JShkGPsDxBIE3oiXKCW-KfO9ry-.JzpZ0GseoW2iGreKheboLAVl55i
 
 $ gpwd -l 1024
-akMusDubOP9xGWwgV9n7HHSN80CeDF8SxRQuNvQBiPwX4xp7aqpoQNRwPYtQGFc4OU1AyluFJkerLYStoVUS1BMerm3o1JY6hvONJ1RVJ8UbznQuG_074imR5QgX3CZ09ckOmD0izIixeUTymz86SxCyOdKUw7LH2q3lU5lWWEAF1nuoRCDHJHCptTA2WUPDYQmQROZ3DUAZwHAuCteWIeT_duPLteYtb_L3QwKJM5hSRucnCOXUBFPW7YWxRhcsPOiZ2jqrzqO44jxcSvUaFFORC8MHofg4zdyaQZOdiXGNoSfyyqTBVOqr1cowpd9BV6Y5lHhf8SA9LVKWm2qoiO0sMC8T1iGNtsVhE0HPQzNw8eqSw0QCkRzisg7iEO85nWuLYx6RKcU54S5p54yr3Cda9w4Yvwl3j6zxM9bIjNyLSNRhqQOsGVpCTuhAh3NeFtHwJgqA3AoW0JpFIXlDo12z60Snev6KjER8MFeHS3AZpfic6H7HH3Pkcdwp80BWPdlTDa4pq0atvHTfAudJ86xySllZ5JsHPFlqLq420Rc8CRYkg4fs01RnQdWuJSs9KIE2O6iDWQqS1jsOqcAGTxXSRpSeYfpS2G7aK0PaKin5h4yii10M7eKdtuwn2uDlKCTTscdOsIBlcy6gk6g2Py0q4cboYjVe2tTToy3hIhX8woVk6LGowmmKEWc2n6ywVWWRCcMOLFFYlCufJ_cWdVsOc5XG0_qCNh1uZ85ZsTDSiCp8qqikF2SlV6B9557KMwzLFfTZ8hi4uDqyp2aBGo9UOdkaGP2ZJhUqThHjrjM6IWtVcl0Ti_r6eacd16UDfSsJ9UAGlTfsGv1boN0V1Vg066tRUjxwuyx5FvX0ZVsvYZdeuombWYHxJuM9CfLFjPYIRorZrIfePIhTFqd2K6vayKp0EiC1Qy2GbumfX4Dr0f9nTpMpp7XxmOPvhpG981X1Yz527FsiYC2FDgK4SyWmaGgBBO82v9CPsnwvgsXW401mpFxK09c5O0TbbdKh
+B30.8LAa_8mOB0gXSTW-ozOZMSad9P2otAKrhHc1fsbGMm62eVxHyX80OCP8qsrwgccfXudm7D5KeTPNl0IjEX9JkDw55wuvkJ1wJyD4WCkaEfyi6hzm.U4d-o_JX5S24CApMjf1366UM_1Cwi07j3qYzUONsqzCOdjHWlMmodQtoMt8OwStXHootN5DjYfLiGpcskbNUfLkqVw19mrVYadWM8sJ0UpbSUQNWFjNd56QVaDJQ_jWBtEtc.QkhLy3oi1n3.W_OuPeix7Z.oPBrV-EQuUgkfHmD1lDsN5Y76b_9cZNeH18mzUlCoVjdkBYfBTiwLdYY20oRnbOWhSw3dCAQefSlPzmLHwhBxggxW8T_wD4y4gqjm3T35v_Lza4b72IhRRPISmABQqLlZwhyhdXAL0LZUClpX5i8HfH_oYNk0e2EyPaomRWhSAENHHs0p9h_eiHM67Q6qG3v8l3IoemxrYrFjA5ebNTbimEpiN5lDgc91tiWh6nOLjzXxr5SKPHe.7jHSlg7.82oFh4hqvWaNEOMlV839TjS-J_j-bqaJxpfABDKDI4tzNA248qAPmto-paoOrcgYfZqTU.Pbrr27DUy-2Fmv2F9fhd3tua26kjK2dQD_MOlfaEC3IeeIQxFhTEfQ9JK6orWKTKzPeaOBRg75DhcFjGKeIl6_cJ_MuRApqCGYvSK1H5vfh9SchNVnZU3T34vs18ySAT14ZvNHkIaVjBWP5ZXC.IvNRL_fH5_W8EyitAY4Z.Nmy2sc71hhHck3tOTGTk3E7av.9V72oIhPsGgHzGUrzgzDfbGtx-LWrB0sCwBDVG_tz2lvzsWT41rKWpyew3gg8y8SPz7feaTTFX47XHX_jUnNn9qFBaEpaM5gufMk3R8MRcSqYp3qAm7f.hy0LIg7ndtUeVgZVE-ig_MJ.kUtnbtR8A4l58axleCBQEbQ0TE8qll4-xoJn6cXL1NA40gZCEX.ZJfo9mncWYe9v89x3Qf7FctMdwUWHU4vpcie8YbBOL
 ```
 
 ### -s, --strength
-You can choose the strength of the password in "god", "strong", "normal", "weak". Default is "normal".
-```shellsession
+You can choose the strength of the password in "god", "strong", "normal", "weak". Default is "strong".
+```
 $ gpwd -s weak -l 16
-zmknwxzsyvbbgffl
+ttexfrokswnjeiqa
 
 $ gpwd -s normal -l 16
-4wejB2eSb_woKUys
+X5CmbohiboF0fnD7
 
 $ gpwd -s strong -l 16
-_cIb8GvAvLWA+qg8
+ok3Rh.wEt7IO_QMv
 
 $ gpwd -s god -l 16
-OslE&p=OgsaCYg)
+%"Eo1.Y0)ZfQ)>~0
 ```
 
 |  mode   |  base string |
 | ------- | ------------------------------------------------------|
 | weak    | `abcdefghijklmnopqrstuvwxyz` |
-| normal  | weak + `ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_` |
-| strong  | normal + `.+/` |
-| god     | strong + `!"#$%&'()*,;<=>?@[]^``{|}~` |
+| normal  | weak + `ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789` |
+| strong  | normal + `.-_` |
+| god     | strong + `+/!\"#$%&'()*,;<=>?@[]^`{\|}~` |
 
+You can also specify the character type directly.(v1.1.0 later)
+
+|  mode   |  base string |
+| ------- | ------------------------------------------------------|
+|  num    | `01234567890` |
+| char1   | `.-_` |
+| char2   | `+/!\"#$%&'()*,;<=>?@[]^`{\|}~` |
+| alpha   | `abcdefghijklmnopqrstuvwxyz` |
+| ALPHA   | `ABCDEFGHIJKLMNOPQRSTUVWXYZ` |
+| alnum   | alpha + num |
+| ALnum   | ALPHA + num |
+| Alnum   | ALPHA + alpha + num |
+| base64  | ALPHA + alpha + num + `/+=` |
 
 ### -i, --item
 You can choose the number to generate. Default is 1.
-```shellsession
+```
 $ gpwd -i 10
-7cZtAV8t
-bNMw19Dp
-oVf0XQUZ
-WodrTBqC
-VzMytwYr
-DWF2iZ7n
-WXvZ3kBO
-BAtM2H7U
-7uxZYXDi
-Jq9pduFB
+mWXAiASq
+b--ZtW7i
+8f97Tdkq
+cV5E4FmJ
+siHQChPA
+4PTESsAV
+FpVbMzLc
+0FIDaI53
+vDJJ.cxU
+ahQ3n7XV
 ```
 
 ## License

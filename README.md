@@ -10,6 +10,7 @@ Generate password tool with [node.js](http://nodejs.org) command-line interfaces
 	1. [-i, --item](#-i---item)
 	1. [-s, --strength](#-s---strength)
     1. [-b, --base](#-b---base)
+	1. [--secure](#--secure)
 1. [License](#license)
 
 ## Installation
@@ -112,6 +113,22 @@ Higher priority than -s,--strength option
 $ gpwd -s god -b "01"
 01101110
 ```
+
+### --secure
+Use secure values by generating random numbers. default is false. Using this option slows down generation. (v1.3.0 later)
+
+```
+$ gpwd --secure
+YuuxUbpy
+```
+
+<dl>
+  <dt>Not use --secure</dt>
+  <dd>Math.random()</dd>
+
+  <dt>Use --secure</dt>
+  <dd><a href="https://nodejs.org/api/crypto.html">Crypto</a> Node.js modules</dd>
+</dl>
 
 ## License
 The MIT License.

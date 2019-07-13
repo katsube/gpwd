@@ -32,6 +32,7 @@ program
   .option("-i, --item [number]",   "how many generate [number]", 1)
   .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more", "strong")
   .option("-b, --base [string]",   "base charactor [string]. Higher priority than -s,--strength option")
+  .option("--secure", "use secure random numbers")
   .parse(process.argv);
 
 //--------------------------------------
@@ -72,7 +73,8 @@ if( (program.base !== undefined) && !(MIN_BASE_LEN <= program.base.length && pro
 passwd.setOption({
     length: Number(program.length),
   strength: program.strength,
-      base: program.base
+      base: program.base,
+    secure: program.secure
 });
 
 for(let i=0; i<program.item; i++){

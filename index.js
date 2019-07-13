@@ -4,8 +4,16 @@
  * @author  M.Katsube <katsubemakito@gmail.com>
  * @license MIT
  */
-
 'use strict';
+
+//---------------------------------------------------------
+// Module
+//---------------------------------------------------------
+const Crypto = require('crypto');
+
+//---------------------------------------------------------
+// Class
+//---------------------------------------------------------
 module.exports = class genPassword {
 
   /**
@@ -35,7 +43,7 @@ module.exports = class genPassword {
         weak: "abcdefghijklmnopqrstuvwxyz"
     };
 
-    this.opt = {length:8, strength:"strong", base:undefined};
+    this.opt = {length:8, strength:"strong", base:undefined, secure:undefined};
     if( opt !== null ){
       this.setOption(opt)
     }
@@ -74,7 +82,7 @@ module.exports = class genPassword {
   /**
    * setter this.option
    *
-   * @param {object} [option] value {length:8, strength:"normal", base:"xxxxxx"}
+   * @param {object} [option] value {length:8, strength:"normal", base:"xxxxxx", secure:true}
    * @returns {void}
    */
   setOption(opt={}){
@@ -88,6 +96,9 @@ module.exports = class genPassword {
     }
     if( ("base" in opt) && (opt.base !== undefined) && (opt.base.match(/^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/)) ){
       this.opt.base = opt.base;
+    }
+    if( ("secure" in opt) && (opt.secure === true) ){
+      this.opt.secure = true;
     }
   }
 
@@ -117,11 +128,19 @@ module.exports = class genPassword {
   gen(){
     const base = this._getBasestring();
     const len  = this.opt.length;
-    let str  = "";
+    const secure = this.opt.secure;
+    let str = "";
 
     for(let i=0; i<len; i++){
-      let i = Math.floor( Math.random() * base.length * 10 ) % base.length;
-      str += base[i];
+      let idx;
+      if(! secure){
+        idx = Math.floor( Math.random() * base.length * 10 ) % base.length;
+      }
+      else{
+        idx = this._getSecureRandom() % base.length;
+      }
+
+      str += base[idx];
     }
 
     this.passwd = str;
@@ -158,5 +177,18 @@ module.exports = class genPassword {
     else{
       return( null );
     }
+  }
+
+  /**
+   * Secure Math.random()
+   *
+   * @private
+   * @returns {integer}
+   */
+  _getSecureRandom(){
+    const buff = Crypto.randomBytes(8);
+    const hex  = buff.toString("hex");
+
+    return ( parseInt(hex,16) );
   }
 }

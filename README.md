@@ -7,7 +7,7 @@ Generate password tool with [node.js](http://nodejs.org) command-line interfaces
     1. [Basic](#basic)
 1. [Option](#option)
     1. [-l, --length](#-l---length)
-	1. [-s, --strength]("-s---strength)
+	1. [-s, --strength](#-s---strength)
     1. [-b, --base](#-b---base)
 	1. [-i, --item](#-i---item)
 1. [License](#license)

@@ -7,7 +7,7 @@
 //--------------------------------------
 // Module
 //--------------------------------------
-const genPassword = require('../genPassword');
+const genPassword = require('gpwd');
 
 //--------------------------------------
 // Test data

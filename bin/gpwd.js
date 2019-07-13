@@ -19,7 +19,7 @@ const MAX_BASE_LEN = 64;
 //--------------------------------------
 // Module
 //--------------------------------------
-const genPassword = require("./genPassword");
+const genPassword = require("../index.js");
 const program = require("commander");
 const passwd  = new genPassword();
 
@@ -27,7 +27,7 @@ const passwd  = new genPassword();
 // commander
 //--------------------------------------
 program
-  .version("1.2.0")
+  .version("1.3.0")
   .option("-l, --length [bytes]",  "string length [bytes]", 8)
   .option("-i, --item [number]",   "how many generate [number]", 1)
   .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more", "strong")

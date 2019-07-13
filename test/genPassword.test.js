@@ -18,10 +18,21 @@ const LEN = [
   , genPassword.MIN_LENGTH
 ];
 const PATTERN = {
-      WEAK: /^[a-z]*$/
-    , NORMAL: /^[a-zA-Z0-9_]*$/
-    , STRONG: /^[a-zA-Z0-9_.+/]*$/
-    ,    GOD: /^[a-zA-Z0-9_.+/!"#$%&'()*,;<=>?@\[\]^`{|}~]*$/
+        weak: /^[a-z]*$/
+    , normal: /^[a-zA-Z0-9]*$/
+    , strong: /^[a-zA-Z0-9_\.\-]*$/
+    ,    god: /^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/
+
+    , alpha: /^[a-z]*$/
+    , ALPHA: /^[A-Z]*$/
+    , Alpha: /^[a-zA-Z]*$/
+    , alnum: /^[a-z0-9]*$/
+    , ALnum: /^[A-Z0-9]*$/
+    , Alnum: /^[a-zA-Z0-9]*$/
+    ,   num: /^[0-9]*$/
+    , char1: /^[\.\-_]*$/
+    , char2: /^[\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/
+    , base64: /^[a-zA-Z0-9/\+=]*$/
 };
 
 //--------------------------------------
@@ -64,7 +75,7 @@ test('password strength', () => {
     }
 
     const passwd = new genPassword();
-    expect(passwd.gen().get()).toMatch(PATTERN["NORMAL"]);
+    expect(passwd.gen().get()).toMatch(PATTERN["strong"]);
   }
 });
 
@@ -81,4 +92,32 @@ test('password length and strength', () => {
       }
     }
   }
+});
+
+test('setOption()', () => {
+  const defaultOpt = {length:8, strength:"strong"};
+
+  // check default value
+  const passwd = new genPassword();
+  expect( passwd.getOption() ).toMatchObject(defaultOpt);
+  expect( passwd.getOption("length") ).toBe(defaultOpt.length);
+  expect( passwd.getOption("strength") ).toBe(defaultOpt.strength);
+
+  // no argument === no change
+  passwd.setOption();
+  expect( passwd.getOption() ).toMatchObject(defaultOpt);
+
+  // change option
+  passwd.setOption({length:16});
+  expect( passwd.getOption() ).toMatchObject({length:16, strength:defaultOpt.strength});
+  passwd.setOption({strength:"normal"});
+  expect( passwd.getOption() ).toMatchObject({length:16, strength:"normal"});
+  passwd.setOption({length:128, strength:"god"});
+  expect( passwd.getOption() ).toMatchObject({length:128, strength:"god"});
+});
+
+test('_getBasestring()', () => {
+  const passwd = new genPassword();
+  expect( passwd._getBasestring("normal") ).toBe("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+  expect( passwd._getBasestring("404") ).toBe(null);
 });

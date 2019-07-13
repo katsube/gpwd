@@ -35,14 +35,9 @@ module.exports = class genPassword {
         weak: "abcdefghijklmnopqrstuvwxyz"
     };
 
-    if(opt === null){
-      this.opt = {
-          length: 8
-        , strength: "NORMAL"
-      };
-    }
-    else{
-      this.opt = opt;
+    this.opt = {length:8, strength:"strong"};
+    if( opt !== null ){
+      this.setOption(opt)
     }
   }
 
@@ -60,13 +55,29 @@ module.exports = class genPassword {
     return(65536);
   }
 
+
+  /**
+   * getter this.option
+   *
+   * @param {string} [key]
+   * @returns {mixed}
+   */
+  getOption(key=null){
+    if( key === null ){
+      return(this.opt);
+    }
+    else if( key in this.opt ){
+      return(this.opt[key]);
+    }
+  }
+
   /**
    * setter this.option
    *
-   * @param {object} option value {length:8, strength:"normal"}
+   * @param {object} [option] value {length:8, strength:"normal"}
    * @returns {void}
    */
-  setOption(opt){
+  setOption(opt={}){
     if( ("length" in opt) && (typeof(opt.length) === "number") ){
       this.opt.length = opt.length;
     }
@@ -79,7 +90,7 @@ module.exports = class genPassword {
 
   /**
    * echo password
-   * 
+   *
    * @returns {void}
    */
   echo(){
@@ -101,8 +112,8 @@ module.exports = class genPassword {
    * @returns {object}
    */
   gen(){
-    let base = this._getBasestring();
-    let len  = this.opt.length;
+    const base = this._getBasestring();
+    const len  = this.opt.length;
     let str  = "";
 
     for(let i=0; i<len; i++){
@@ -116,7 +127,7 @@ module.exports = class genPassword {
 
   /**
    * check exists strength
-   * 
+   *
    * @param {string} strength
    * @returns {boolean}
    */
@@ -128,16 +139,17 @@ module.exports = class genPassword {
    * get basestring
    *
    * @private
-   * @returns {string}
+   * @param {string} [str] strength
+   * @returns {string|null}
    */
-  _getBasestring(){
-    const strength = this.opt.strength;
+  _getBasestring(str=null){
+    const strength = (str===null)? this.opt.strength:str;
 
     if( this.existsStrength( strength ) ){
       return( this.basestring[strength] );
     }
     else{
-      return( this.basestring.normal );
+      return( null );
     }
   }
 }

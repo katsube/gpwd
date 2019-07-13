@@ -27,7 +27,7 @@ const passwd  = new genPassword();
 // commander
 //--------------------------------------
 program
-  .version("1.1.0")
+  .version("1.2.0")
   .option("-l, --length [bytes]",  "string length [bytes]", 8)
   .option("-i, --item [number]",   "how many generate [number]", 1)
   .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more", "strong")

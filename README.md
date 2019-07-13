@@ -1,6 +1,16 @@
 # gpwd.js
-
 Generate password tool with [node.js](http://nodejs.org) command-line interfaces.
+
+## INDEX
+1. [Installation](#installation)
+1. [Usage](#usage)
+    1. [Basic](#basic)
+1. [Option](#option)
+    1. [-l, --length](#-l--length)
+	1. [-s, --strength]("-s--strength)
+    1. [-b, --base](#-b--base)
+	1. [-i, --item](#-i--item)
+1. [License](#license)
 
 ## Installation
 ```
@@ -65,6 +75,27 @@ You can also specify the character type directly.(v1.1.0 later)
 | ALnum   | ALPHA + num |
 | Alnum   | ALPHA + alpha + num |
 | base64  | ALPHA + alpha + num + `/+=` |
+
+### -b, --base
+You can specify the character type used for the password. (v1.2.0 later)
+
+example is like Binary, Hexadecimal and Morse code.
+```
+$ gpwd -b "01"
+10100010
+
+$ gpwd -b "0123456789ABCDEF"
+9672AE1C
+
+$ gpwd -b ".-_"
+.--.._..
+```
+
+Higher priority than -s,--strength option
+```
+$ gpwd -s god -b "01"
+01101110
+```
 
 ### -i, --item
 You can choose the number to generate. Default is 1.

@@ -35,7 +35,7 @@ module.exports = class genPassword {
         weak: "abcdefghijklmnopqrstuvwxyz"
     };
 
-    this.opt = {length:8, strength:"strong"};
+    this.opt = {length:8, strength:"strong", base:undefined};
     if( opt !== null ){
       this.setOption(opt)
     }
@@ -74,7 +74,7 @@ module.exports = class genPassword {
   /**
    * setter this.option
    *
-   * @param {object} [option] value {length:8, strength:"normal"}
+   * @param {object} [option] value {length:8, strength:"normal", base:"xxxxxx"}
    * @returns {void}
    */
   setOption(opt={}){
@@ -85,6 +85,9 @@ module.exports = class genPassword {
       if( this.existsStrength(opt.strength) ){
         this.opt.strength = opt.strength;
       }
+    }
+    if( ("base" in opt) && (opt.base !== undefined) && (opt.base.match(/^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/)) ){
+      this.opt.base = opt.base;
     }
   }
 
@@ -144,8 +147,12 @@ module.exports = class genPassword {
    */
   _getBasestring(str=null){
     const strength = (str===null)? this.opt.strength:str;
+    const base = this.opt.base;
 
-    if( this.existsStrength( strength ) ){
+    if( base !== undefined ){
+      return( base );
+    }
+    else if( this.existsStrength( strength ) ){
       return( this.basestring[strength] );
     }
     else{

@@ -1,94 +1,194 @@
-#!/usr/bin/env node
-"use strict";
-
 /**
- * Generate Password
+ * Generate Password class
  *
  * @author  M.Katsube <katsubemakito@gmail.com>
  * @license MIT
  */
+'use strict';
 
-//--------------------------------------
-// Constant
-//--------------------------------------
-const MIN_ITEM = 1;
-const MAX_ITEM = 65534;
-const MIN_BASE_LEN = 2;
-const MAX_BASE_LEN = 64;
-
-//--------------------------------------
+//---------------------------------------------------------
 // Module
-//--------------------------------------
-const genPassword = require("./genPassword");
-const program = require("commander");
-const passwd  = new genPassword();
+//---------------------------------------------------------
+const Crypto = require('crypto');
 
-//--------------------------------------
-// commander
-//--------------------------------------
-program
-  .version("1.2.0")
-  .option("-l, --length [bytes]",  "string length [bytes]", 8)
-  .option("-i, --item [number]",   "how many generate [number]", 1)
-  .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more", "strong")
-  .option("-b, --base [string]",   "base charactor [string]. Higher priority than -s,--strength option")
-  .parse(process.argv);
+//---------------------------------------------------------
+// Class
+//---------------------------------------------------------
+module.exports = class genPassword {
 
-//--------------------------------------
-// Validation
-//--------------------------------------
-// --length (is number)
-if( ! Number.isInteger( Number(program.length) ) ){
-  error("-l, --length option is only integer.");
-}
-// --length (between min to max)
-if( ! (genPassword.MIN_LENGTH <= Number(program.length) && Number(program.length) <= genPassword.MAX_LENGTH) ){
-  error(`-l, --length option is need between ${genPassword.MIN_LENGTH} to ${genPassword.MAX_LENGTH}`);
-}
-// --strength
-if( ! passwd.existsStrength(program.strength) ){
-  error("-s, --strength option is [god|strong|normal|weak] and more.");
-}
-// --item (is number)
-if( ! Number.isInteger( Number(program.item) ) ){
-  error("-i, --item option is only integer.");
-}
-// --item (between min to max)
-if( ! (MIN_ITEM <= Number(program.item) && Number(program.item) <= MAX_ITEM) ){
-  error(`-l, --length option is need between ${MIN_ITEM} to ${MAX_ITEM}`);
-}
-// --base (charactor type)
-if( (program.base !== undefined) && ( ! program.base.match(/^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/) )){
-  error("-b, --base option is only use [a-zA-Z0-9.-_+/!\"#$%&'()*,;<=>?@[]^`{|}~]");
-}
-// --base (string length)
-if( (program.base !== undefined) && !(MIN_BASE_LEN <= program.base.length && program.base.length <= MAX_BASE_LEN) ){
-  error(`-b, --base option is need between ${MIN_BASE_LEN} to ${MAX_BASE_LEN} string length`);
-}
+  /**
+   * constructors
+   *
+   * @constructor
+   * @param {object} opt option value {length:8, strength:"normal"}
+   * @returns {void}
+   */
+  constructor(opt=null){
+    this.passwd = null;
+    this.basestring = {
+      alpha: "abcdefghijklmnopqrstuvwxyz",
+      ALPHA: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      Alpha: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      alnum: "abcdefghijklmnopqrstuvwxyz0123456789",
+      ALnum: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      Alnum: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        num: "0123456789",
+       char1: ".-_",
+       char2: "+/!\"#$%&'()*,;<=>?@[]^`{|}~",
+      base64: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/+=",
 
-//--------------------------------------
-// Generate password
-//--------------------------------------
-passwd.setOption({
-    length: Number(program.length),
-  strength: program.strength,
-      base: program.base
-});
+         god: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_+/!\"#$%&'()*,;<=>?@[]^`{|}~",
+      strong: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_",
+      normal: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        weak: "abcdefghijklmnopqrstuvwxyz"
+    };
 
-for(let i=0; i<program.item; i++){
-  passwd
-    .gen()
-    .echo();
-}
+    this.opt = {length:8, strength:"strong", base:undefined, secure:undefined};
+    if( opt !== null ){
+      this.setOption(opt)
+    }
+  }
 
 
-/**
- * Display Error and exit
- *
- * @param {string} str error message
- * @returns {void}
- */
-function error(str){
-  console.error("[Error] " + str);
-  process.exit(1);
+  /**
+   * minimum password length
+   */
+  static get MIN_LENGTH(){
+    return(1);
+  }
+  /**
+   * maximum password length
+   */
+  static get MAX_LENGTH(){
+    return(65536);
+  }
+
+
+  /**
+   * getter this.option
+   *
+   * @param {string} [key]
+   * @returns {mixed}
+   */
+  getOption(key=null){
+    if( key === null ){
+      return(this.opt);
+    }
+    else if( key in this.opt ){
+      return(this.opt[key]);
+    }
+  }
+
+  /**
+   * setter this.option
+   *
+   * @param {object} [option] value {length:8, strength:"normal", base:"xxxxxx", secure:true}
+   * @returns {void}
+   */
+  setOption(opt={}){
+    if( ("length" in opt) && (typeof(opt.length) === "number") ){
+      this.opt.length = opt.length;
+    }
+    if( ("strength" in opt) && (typeof(opt.strength) === "string") ){
+      if( this.existsStrength(opt.strength) ){
+        this.opt.strength = opt.strength;
+      }
+    }
+    if( ("base" in opt) && (opt.base !== undefined) && (opt.base.match(/^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/)) ){
+      this.opt.base = opt.base;
+    }
+    if( ("secure" in opt) && (opt.secure === true) ){
+      this.opt.secure = true;
+    }
+  }
+
+  /**
+   * echo password
+   *
+   * @returns {void}
+   */
+  echo(){
+    console.log(this.passwd);
+  }
+
+  /**
+   * return password
+   *
+   * @returns {string}
+   */
+  get(){
+    return(this.passwd);
+  }
+
+  /**
+   * Generate password
+   *
+   * @returns {object}
+   */
+  gen(){
+    const base = this._getBasestring();
+    const len  = this.opt.length;
+    const secure = this.opt.secure;
+    let str = "";
+
+    for(let i=0; i<len; i++){
+      let idx;
+      if(! secure){
+        idx = Math.floor( Math.random() * base.length * 10 ) % base.length;
+      }
+      else{
+        idx = this._getSecureRandom() % base.length;
+      }
+
+      str += base[idx];
+    }
+
+    this.passwd = str;
+    return(this);
+  }
+
+  /**
+   * check exists strength
+   *
+   * @param {string} strength
+   * @returns {boolean}
+   */
+  existsStrength(strength){
+    return( strength in this.basestring );
+  }
+
+  /**
+   * get basestring
+   *
+   * @private
+   * @param {string} [str] strength
+   * @returns {string|null}
+   */
+  _getBasestring(str=null){
+    const strength = (str===null)? this.opt.strength:str;
+    const base = this.opt.base;
+
+    if( base !== undefined ){
+      return( base );
+    }
+    else if( this.existsStrength( strength ) ){
+      return( this.basestring[strength] );
+    }
+    else{
+      return( null );
+    }
+  }
+
+  /**
+   * Secure Math.random()
+   *
+   * @private
+   * @returns {integer}
+   */
+  _getSecureRandom(){
+    const buff = Crypto.randomBytes(8);
+    const hex  = buff.toString("hex");
+
+    return ( parseInt(hex,16) );
+  }
 }

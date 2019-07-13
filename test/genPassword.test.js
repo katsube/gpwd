@@ -7,7 +7,7 @@
 //--------------------------------------
 // Module
 //--------------------------------------
-const genPassword = require('../genPassword');
+const genPassword = require('gpwd');
 
 //--------------------------------------
 // Test data
@@ -95,7 +95,7 @@ test('password length and strength', () => {
 });
 
 test('setOption()', () => {
-  const defaultOpt = {length:8, strength:"strong", base:undefined};
+  const defaultOpt = {length:8, strength:"strong", base:undefined, secure:undefined};
 
   // check default value
   const passwd = new genPassword();
@@ -103,6 +103,7 @@ test('setOption()', () => {
   expect( passwd.getOption("length") ).toBe(defaultOpt.length);
   expect( passwd.getOption("strength") ).toBe(defaultOpt.strength);
   expect( passwd.getOption("base") ).toBe(defaultOpt.base);
+  expect( passwd.getOption("secure") ).toBe(defaultOpt.secure);
 
   // no argument === no change
   passwd.setOption();
@@ -119,8 +120,10 @@ test('setOption()', () => {
   expect( passwd.getOption() ).toMatchObject({length:16, strength:"normal", base:defaultOpt.base});
   passwd.setOption({base:"01"});
   expect( passwd.getOption() ).toMatchObject({length:16, strength:"normal", base:"01"});
-  passwd.setOption({length:128, strength:"god", base:"01"});
-  expect( passwd.getOption() ).toMatchObject({length:128, strength:"god", base:"01"});
+  passwd.setOption({secure:true});
+  expect( passwd.getOption() ).toMatchObject({length:16, strength:"normal", base:"01", secure:true});
+  passwd.setOption({length:128, strength:"god", base:"01", secure:true});
+  expect( passwd.getOption() ).toMatchObject({length:128, strength:"god", base:"01", secure:true});
 });
 
 test('_getBasestring()', () => {
@@ -139,4 +142,11 @@ test('-b, --base', () => {
 
   passwd.setOption({base:"0123456789ABCDEF", strength:"god"});
   expect(passwd.gen().get()).toMatch(/^[0-9A-F]*$/);
+});
+
+test('--secure', () => {
+  const passwd = new genPassword({secure:true});
+  for(let i=0; i<1000; i++){
+    expect(passwd.gen().get()).toMatch(PATTERN["strong"]);
+  }
 });

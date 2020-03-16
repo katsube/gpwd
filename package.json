@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/katsube/gpw#readme",
   "dependencies": {
-    "commander": "^2.20.0"
+    "commander": "^5.0.0"
   },
   "devDependencies": {
-    "jest": "^24.8.0"
+    "jest": "^25.1.0"
   }
 }

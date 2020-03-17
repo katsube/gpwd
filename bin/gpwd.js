@@ -40,7 +40,7 @@ const config = getConfig();
 // commander
 //--------------------------------------
 program
-  .version("1.3.1")
+  .version("1.4.0")
   .option("-l, --length [bytes]",  "string length [bytes]")
   .option("-i, --item [number]",   "how many generate [number]")
   .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more")

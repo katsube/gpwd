@@ -15,25 +15,57 @@ const MIN_ITEM = 1;
 const MAX_ITEM = 65534;
 const MIN_BASE_LEN = 2;
 const MAX_BASE_LEN = 64;
+const CONFIG_FILENAME = '.gpwd.json';
+const DEFAULT_OPT = {
+  length: 8,
+  item: 1,
+  strength: "strong",
+  base: undefined,
+  secure: false
+};
 
 //--------------------------------------
 // Module
 //--------------------------------------
+const fs = require("fs");
+const path = require("path");
 const genPassword = require("../index.js");
 const program = require("commander");
 const passwd  = new genPassword();
+
+// Config file
+const config = getConfig();
 
 //--------------------------------------
 // commander
 //--------------------------------------
 program
-  .version("1.3.1")
-  .option("-l, --length [bytes]",  "string length [bytes]", 8)
-  .option("-i, --item [number]",   "how many generate [number]", 1)
-  .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more", "strong")
+  .version("1.4.0")
+  .option("-l, --length [bytes]",  "string length [bytes]")
+  .option("-i, --item [number]",   "how many generate [number]")
+  .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more")
   .option("-b, --base [string]",   "base charactor [string]. Higher priority than -s,--strength option")
   .option("--secure", "use secure random numbers")
   .parse(process.argv);
+
+//--------------------------------------
+// Set Default Value
+//--------------------------------------
+if( program.length === undefined ){
+  program.length = ("length" in config)?  config.length:DEFAULT_OPT.length;
+}
+if( program.item === undefined ){
+  program.item = ("item" in config)?  config.item:DEFAULT_OPT.item;
+}
+if( program.strength === undefined ){
+  program.strength = ("strength" in config)?  config.strength:DEFAULT_OPT.strength;
+}
+if( program.base === undefined ){
+  program.base = ("base" in config)?  config.base:DEFAULT_OPT.base;
+}
+if( program.secure === undefined ){
+  program.secure = ("secure" in config)?  config.secure:DEFAULT_OPT.secure;
+}
 
 //--------------------------------------
 // Validation
@@ -83,6 +115,47 @@ for(let i=0; i<program.item; i++){
     .echo();
 }
 
+
+/**
+ * Return configuration
+ *
+ * @return {Object|boolean}
+ */
+function getConfig(){
+  // Get Home directory path
+  const home = getHomeDirevtory();
+  if( home === false){
+    return(false);
+  }
+
+  // Get configuration
+  const file = path.join(home, CONFIG_FILENAME);
+  if( fs.existsSync(file) ){
+    try{
+      return( require(file) );
+    }
+    catch(err){
+      error(err);
+    }
+  }
+
+  return(false);
+}
+
+/**
+ * Return HOME Directory path
+ *
+ * @return {string|boolean}
+ */
+function getHomeDirevtory(){
+  let path = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
+  if( fs.existsSync(path) ){
+    return(path);
+  }
+  else{
+    return(false);
+  }
+}
 
 /**
  * Display Error and exit

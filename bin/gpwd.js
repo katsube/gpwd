@@ -125,7 +125,7 @@ function getConfig(){
   // Get Home directory path
   const home = getHomeDirevtory();
   if( home === false){
-    return(false);
+    return({});
   }
 
   // Get configuration
@@ -139,7 +139,7 @@ function getConfig(){
     }
   }
 
-  return(false);
+  return({});
 }
 
 /**

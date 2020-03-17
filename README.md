@@ -11,6 +11,7 @@ Generate password tool with [node.js](http://nodejs.org) command-line interfaces
 	1. [-s, --strength](#-s---strength)
     1. [-b, --base](#-b---base)
 	1. [--secure](#--secure)
+1. [Configuration](#configuration)
 1. [License](#license)
 
 ## Installation
@@ -129,6 +130,31 @@ YuuxUbpy
   <dt>Use --secure</dt>
   <dd><a href="https://nodejs.org/api/crypto.html">Crypto</a> Node.js modules</dd>
 </dl>
+
+## Configuration
+You can save frequently used options.(v1.4.0 later)
+
+```
+$ cat ~/.gpwd.json
+{
+  "length": 16,
+  "strength": "god",
+  "secure": true
+}
+```
+
+"base" option is also available. Higher priority than "strength" option.
+```
+$ cat ~/.gpwd.json
+{
+  "length": 16,
+  "strength": "god",
+  "base": ".-",
+  "secure": true
+}
+```
+
+If options are specified at runtime, it will be ignored.
 
 ## License
 The MIT License.

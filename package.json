@@ -27,7 +27,11 @@
   },
   "homepage": "https://github.com/katsube/gpw#readme",
   "dependencies": {
-    "commander": "^5.0.0"
+    "cheerio": "^1.0.0-rc.3",
+    "commander": "^5.0.0",
+    "nedb": "^1.8.0",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8"
   },
   "devDependencies": {
     "jest": "^25.1.0"

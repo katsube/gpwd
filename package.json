@@ -5,7 +5,8 @@
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
-    "gpwd": "bin/gpwd.js"
+	"gpwd": "bin/gpwd.js",
+	"gpwd-download": "bin/gpwd-download.js"
   },
   "scripts": {
     "test": "jest"

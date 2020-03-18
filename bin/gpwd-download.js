@@ -27,9 +27,7 @@ const URL_WIKTIONARY = [
   "https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists/PG/2006/04/20001-30000",
   "https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists/PG/2006/04/30001-40000"
 ];
-
 const FILE_DICTIONARY = path.join(__dirname, '../data/dictionary/english.nedb');
-
 const SKIP_WORDLEN = 2;
 
 //--------------------------------------
@@ -39,7 +37,6 @@ const SKIP_WORDLEN = 2;
   // Downlad
   console.log("[Download Start]");
   const files = await getWikitionary();
-  console.log("done");
 
   // Scraping
   console.log("[Scraping Start]");
@@ -53,11 +50,11 @@ const SKIP_WORDLEN = 2;
   const prdlist = words.filter((x, i, self)=>{
     return self.indexOf(x) === i;
   });
-  console.log("done");
+  console.log(`  ${prdlist.length} words`);
 
   // Save
-  console.log("[Write file Start]");
-  await saveWords(FILE_DICTIONARY, prdlist);
+  console.log("[Make dictionary]");
+  saveWords(FILE_DICTIONARY, prdlist);
 })();
 
 

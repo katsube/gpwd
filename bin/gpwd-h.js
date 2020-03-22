@@ -89,6 +89,6 @@ passwd.setOption({
 
 for(let i=0; i<program.item; i++){
   passwd
-    .gen()
+    .generate()
     .echo();
 }

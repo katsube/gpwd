@@ -15,7 +15,6 @@ const MIN_ITEM = 1;
 const MAX_ITEM = 65534;
 const MIN_BASE_LEN = 2;
 const MAX_BASE_LEN = 64;
-const CONFIG_FILENAME = '.gpwd.json';
 const DEFAULT_OPT = {
   length: 8,
   item: 1,
@@ -27,14 +26,13 @@ const DEFAULT_OPT = {
 //--------------------------------------
 // Module
 //--------------------------------------
-const fs = require("fs");
-const path = require("path");
 const program = require("commander");
+const util = require("../lib/util.js");
 const genPassword = require("../index.js");
 const passwd  = new genPassword();
 
 // Config file
-const config = getConfig();
+const config = util.getConfig();
 
 //--------------------------------------
 // commander
@@ -72,31 +70,31 @@ if( program.secure === undefined ){
 //--------------------------------------
 // --length (is number)
 if( ! Number.isInteger( Number(program.length) ) ){
-  error("-l, --length option is only integer.");
+  util.error("-l, --length option is only integer.");
 }
 // --length (between min to max)
 if( ! (genPassword.MIN_LENGTH <= Number(program.length) && Number(program.length) <= genPassword.MAX_LENGTH) ){
-  error(`-l, --length option is need between ${genPassword.MIN_LENGTH} to ${genPassword.MAX_LENGTH}`);
+  util.error(`-l, --length option is need between ${genPassword.MIN_LENGTH} to ${genPassword.MAX_LENGTH}`);
 }
 // --strength
 if( ! passwd.existsStrength(program.strength) ){
-  error("-s, --strength option is [god|strong|normal|weak] and more.");
+  util.error("-s, --strength option is [god|strong|normal|weak] and more.");
 }
 // --item (is number)
 if( ! Number.isInteger( Number(program.item) ) ){
-  error("-i, --item option is only integer.");
+  util.error("-i, --item option is only integer.");
 }
 // --item (between min to max)
 if( ! (MIN_ITEM <= Number(program.item) && Number(program.item) <= MAX_ITEM) ){
-  error(`-i, --item option is need between ${MIN_ITEM} to ${MAX_ITEM}`);
+  util.error(`-i, --item option is need between ${MIN_ITEM} to ${MAX_ITEM}`);
 }
 // --base (charactor type)
 if( (program.base !== undefined) && ( ! program.base.match(/^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/) )){
-  error("-b, --base option is only use [a-zA-Z0-9.-_+/!\"#$%&'()*,;<=>?@[]^`{|}~]");
+  util.error("-b, --base option is only use [a-zA-Z0-9.-_+/!\"#$%&'()*,;<=>?@[]^`{|}~]");
 }
 // --base (string length)
 if( (program.base !== undefined) && !(MIN_BASE_LEN <= program.base.length && program.base.length <= MAX_BASE_LEN) ){
-  error(`-b, --base option is need between ${MIN_BASE_LEN} to ${MAX_BASE_LEN} string length`);
+  util.error(`-b, --base option is need between ${MIN_BASE_LEN} to ${MAX_BASE_LEN} string length`);
 }
 
 //--------------------------------------
@@ -113,57 +111,4 @@ for(let i=0; i<program.item; i++){
   passwd
     .gen()
     .echo();
-}
-
-
-/**
- * Return configuration
- *
- * @return {Object|boolean}
- */
-function getConfig(){
-  // Get Home directory path
-  const home = getHomeDirevtory();
-  if( home === false){
-    return({});
-  }
-
-  // Get configuration
-  const file = path.join(home, CONFIG_FILENAME);
-  if( fs.existsSync(file) ){
-    try{
-      return( require(file) );
-    }
-    catch(err){
-      error(err);
-    }
-  }
-
-  return({});
-}
-
-/**
- * Return HOME Directory path
- *
- * @return {string|boolean}
- */
-function getHomeDirevtory(){
-  let path = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
-  if( fs.existsSync(path) ){
-    return(path);
-  }
-  else{
-    return(false);
-  }
-}
-
-/**
- * Display Error and exit
- *
- * @param {string} str error message
- * @returns {void}
- */
-function error(str){
-  console.error("[Error] " + str);
-  process.exit(1);
 }

@@ -5,8 +5,8 @@
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
-	"gpwd": "bin/gpwd.js",
-	"gpwd-download": "bin/gpwd-download.js"
+    "gpwd": "bin/gpwd.js",
+    "gpwd-download": "bin/gpwd-download.js"
   },
   "scripts": {
     "test": "jest"
@@ -31,6 +31,7 @@
     "cheerio": "^1.0.0-rc.3",
     "commander": "^5.0.0",
     "nedb": "^1.8.0",
+    "nedb-promise": "^2.0.1",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8"
   },

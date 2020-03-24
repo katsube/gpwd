@@ -16,7 +16,8 @@ const path = require("path");
 const fs = require("fs");
 const reqp = require("request-promise-native");
 const cheerio = require("cheerio");
-const nedb = require('nedb');
+const nedb = require("nedb-promise");
+const util = require("../lib/util.js");
 
 //--------------------------------------
 // Constant
@@ -28,6 +29,7 @@ const URL_WIKTIONARY = [
   "https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists/PG/2006/04/30001-40000"
 ];
 const FILE_DICTIONARY = path.join(__dirname, '../data/dictionary/english.nedb');
+const FILE_DICTIONARY_SUMMARY = path.join(__dirname, '../data/dictionary/english_summary.json');
 const SKIP_WORDLEN = 2;
 
 //--------------------------------------
@@ -44,6 +46,7 @@ const SKIP_WORDLEN = 2;
   for(let i=0; i<files.length; i++){
     const word = await getEnglishWord(files[i]);
     words.push(...word);
+    console.log(`  (${i+1}/${files.length}) ${files[i]}`);
   }
 
   // Remove duplication
@@ -54,7 +57,14 @@ const SKIP_WORDLEN = 2;
 
   // Save
   console.log("[Make dictionary]");
-  saveWords(FILE_DICTIONARY, prdlist);
+  const db = await saveWords(FILE_DICTIONARY, prdlist);
+
+  // Count
+  await countWords(db, FILE_DICTIONARY_SUMMARY);
+
+  // Done
+  console.log("");
+  console.log("YEAR! Generated dictionary!");
 })();
 
 
@@ -79,7 +89,7 @@ async function getWikitionary(){
         files.push(file);
       })
       .catch((err)=>{
-        error(err.message);
+        util.error(err.message);
       });
   };
 
@@ -125,12 +135,8 @@ async function saveWords(file, words){
       filename: file,
       autoload: true}
   );
-  db.ensureIndex({ fieldName: "w", unique:true }, (err)=>{
-    if(err !== null) error(err);
-  });
-  db.ensureIndex({ fieldName: "l" }, (err)=>{
-    if(err !== null) error(err);
-  });
+  await db.ensureIndex({ fieldName: "w", unique:true });
+  await db.ensureIndex({ fieldName: "l" });
 
   const len = words.length;
   for( let i=0; i<len; i++ ){
@@ -139,22 +145,34 @@ async function saveWords(file, words){
       l: words[i].length
     };
 
-    db.insert(doc, (err, newDoc)=>{
-      if( err !== null){
-        console.log(err)
-      }
-    });
+    await db.insert(doc);
+    if( ( (i+1) % 2000) === 0 ){
+      console.log(`  write ${i+1} words`);
+    }
   }
+  console.log(`  write ${len} words`);
+
+  return(db);
 }
 
-
 /**
- * Display Error and exit
+ * Count of characters
  *
- * @param {string} str error message
- * @returns {void}
+ * @param {object} db - nedb object
+ * @param {string} file - summary file path
+ * @return {void}
  */
-function error(str){
-  console.error("[Error] " + str);
-  process.exit(1);
+async function countWords( db, file ){
+  let result = {};
+  for(let i=3; i<=20; i++){
+    const count = await db.count({l:i})
+    result[i]=count;
+  }
+
+  try{
+    fs.writeFileSync(file, JSON.stringify(result));
+  }
+  catch(err){
+    util.error(err);
+  }
 }

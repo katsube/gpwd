@@ -51,51 +51,52 @@ program
 //--------------------------------------
 // Set Default Value
 //--------------------------------------
-if( program.length === undefined ){
-  program.length = ("length" in config)?  config.length:DEFAULT_OPT.length;
+const options = program.opts();
+if( options.length === undefined ){
+  options.length = ("length" in config)?  config.length:DEFAULT_OPT.length;
 }
-if( program.item === undefined ){
-  program.item = ("item" in config)?  config.item:DEFAULT_OPT.item;
+if( options.item === undefined ){
+  options.item = ("item" in config)?  config.item:DEFAULT_OPT.item;
 }
-if( program.strength === undefined ){
-  program.strength = ("strength" in config)?  config.strength:DEFAULT_OPT.strength;
+if( options.strength === undefined ){
+  options.strength = ("strength" in config)?  config.strength:DEFAULT_OPT.strength;
 }
-if( program.base === undefined ){
-  program.base = ("base" in config)?  config.base:DEFAULT_OPT.base;
+if( options.base === undefined ){
+  options.base = ("base" in config)?  config.base:DEFAULT_OPT.base;
 }
-if( program.secure === undefined ){
-  program.secure = ("secure" in config)?  config.secure:DEFAULT_OPT.secure;
+if( options.secure === undefined ){
+  options.secure = ("secure" in config)?  config.secure:DEFAULT_OPT.secure;
 }
 
 //--------------------------------------
 // Validation
 //--------------------------------------
 // --length (is number)
-if( ! Number.isInteger( Number(program.length) ) ){
+if( ! Number.isInteger( Number(options.length) ) ){
   error("-l, --length option is only integer.");
 }
 // --length (between min to max)
-if( ! (genPassword.MIN_LENGTH <= Number(program.length) && Number(program.length) <= genPassword.MAX_LENGTH) ){
+if( ! (genPassword.MIN_LENGTH <= Number(options.length) && Number(options.length) <= genPassword.MAX_LENGTH) ){
   error(`-l, --length option is need between ${genPassword.MIN_LENGTH} to ${genPassword.MAX_LENGTH}`);
 }
 // --strength
-if( ! passwd.existsStrength(program.strength) ){
+if( ! passwd.existsStrength(options.strength) ){
   error("-s, --strength option is [god|strong|normal|weak] and more.");
 }
 // --item (is number)
-if( ! Number.isInteger( Number(program.item) ) ){
+if( ! Number.isInteger( Number(options.item) ) ){
   error("-i, --item option is only integer.");
 }
 // --item (between min to max)
-if( ! (MIN_ITEM <= Number(program.item) && Number(program.item) <= MAX_ITEM) ){
+if( ! (MIN_ITEM <= Number(options.item) && Number(options.item) <= MAX_ITEM) ){
   error(`-l, --length option is need between ${MIN_ITEM} to ${MAX_ITEM}`);
 }
 // --base (charactor type)
-if( (program.base !== undefined) && ( ! program.base.match(/^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/) )){
+if( (options.base !== undefined) && ( ! options.base.match(/^[a-zA-Z0-9\.\-_\+/!\"#\$%&'\(\)\*,;<=>?@\[\]\^`{\|}~]*$/) )){
   error("-b, --base option is only use [a-zA-Z0-9.-_+/!\"#$%&'()*,;<=>?@[]^`{|}~]");
 }
 // --base (string length)
-if( (program.base !== undefined) && !(MIN_BASE_LEN <= program.base.length && program.base.length <= MAX_BASE_LEN) ){
+if( (options.base !== undefined) && !(MIN_BASE_LEN <= options.base.length && options.base.length <= MAX_BASE_LEN) ){
   error(`-b, --base option is need between ${MIN_BASE_LEN} to ${MAX_BASE_LEN} string length`);
 }
 
@@ -103,13 +104,13 @@ if( (program.base !== undefined) && !(MIN_BASE_LEN <= program.base.length && pro
 // Generate password
 //--------------------------------------
 passwd.setOption({
-    length: Number(program.length),
-  strength: program.strength,
-      base: program.base,
-    secure: program.secure
+    length: Number(options.length),
+  strength: options.strength,
+      base: options.base,
+    secure: options.secure
 });
 
-for(let i=0; i<program.item; i++){
+for(let i=0; i<options.item; i++){
   passwd
     .gen()
     .echo();

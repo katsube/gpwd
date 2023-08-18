@@ -4,8 +4,10 @@ const passwd = new genPassword({
   length: 16
 });
 
-const a = passwd
-            .gen()   // generate password
-            .get();  // get password
+for(let i=0; i<3; i++){
+  const a = passwd
+              .gen()   // generate password
+              .get();  // get password
 
-console.log(a);
+  console.log(a);
+}

@@ -6,11 +6,12 @@ Generate password tool with [node.js](http://nodejs.org) command-line interfaces
 1. [Usage](#usage)
     1. [Basic](#basic)
 1. [Option](#option)
-    1. [-l, --length](#-l---length)
-	1. [-i, --item](#-i---item)
-	1. [-s, --strength](#-s---strength)
-    1. [-b, --base](#-b---base)
-	1. [--secure](#--secure)
+    1. [-l, --length](#l---length)
+	1. [-i, --item](#i---item)
+	1. [-s, --strength](#s---strength)
+    1. [-b, --base](#b---base)
+	1. [--secure](#secure)
+    1. [--seed](#seed)
 1. [Configuration](#configuration)
 1. [License](#license)
 
@@ -130,6 +131,21 @@ YuuxUbpy
   <dt>Use --secure</dt>
   <dd><a href="https://nodejs.org/api/crypto.html">Crypto</a> Node.js modules</dd>
 </dl>
+
+### --seed
+Generates a random string from a pseudo-random number by specifying seed. (v1.5.0 later)
+
+```
+$ gpwd --seed 12345
+0V2J5i8A
+
+$ gpwd --seed 12345
+0V2J5i8A
+```
+
+* Only integers
+* It can also be used with `-l` and `-i`, `-s`, `-b` options
+* `--secure` option is ignored
 
 ## Configuration
 You can save frequently used options.(v1.4.0 later)

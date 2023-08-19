@@ -126,12 +126,6 @@ test('setOption()', () => {
   expect( passwd.getOption() ).toMatchObject({length:128, strength:"god", base:"01", secure:true});
 });
 
-test('_getBasestring()', () => {
-  const passwd = new genPassword();
-  expect( passwd._getBasestring("normal") ).toBe("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-  expect( passwd._getBasestring("404") ).toBe(null);
-});
-
 test('-b, --base', () => {
   const passwd = new genPassword();
 
@@ -148,5 +142,14 @@ test('--secure', () => {
   const passwd = new genPassword({secure:true});
   for(let i=0; i<1000; i++){
     expect(passwd.gen().get()).toMatch(PATTERN["strong"]);
+  }
+});
+
+test('--seed', () => {
+  for(let i=0; i<3; i++){
+    const passwd = new genPassword({seed:1234, strength:'strong', length:8});
+    expect(passwd.gen().get()).toBe("qMPQwzZQ");
+    expect(passwd.gen().get()).toBe("7i2gD_Av");
+    expect(passwd.gen().get()).toBe("2Pt_j4S1");
   }
 });

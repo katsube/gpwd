@@ -21,7 +21,8 @@ const DEFAULT_OPT = {
   item: 1,
   strength: "strong",
   base: undefined,
-  secure: false
+  secure: false,
+  seed: undefined
 };
 
 //--------------------------------------
@@ -36,16 +37,20 @@ const passwd  = new genPassword();
 // Config file
 const config = getConfig();
 
+// Package version
+const version = require("../package.json").version;
+
 //--------------------------------------
 // commander
 //--------------------------------------
 program
-  .version("1.4.0")
+  .version(version)
   .option("-l, --length [bytes]",  "string length [bytes]")
   .option("-i, --item [number]",   "how many generate [number]")
   .option("-s, --strength [mode]", "string strength [god|strong|normal|weak] and more")
   .option("-b, --base [string]",   "base charactor [string]. Higher priority than -s,--strength option")
   .option("--secure", "use secure random numbers")
+  .option("--seed [number]", "use seed for random numbers. seed is only number.")
   .parse(process.argv);
 
 //--------------------------------------
@@ -66,6 +71,9 @@ if( options.base === undefined ){
 }
 if( options.secure === undefined ){
   options.secure = ("secure" in config)?  config.secure:DEFAULT_OPT.secure;
+}
+if( options.seed === undefined ){
+  options.seed = ("seed" in config)?  config.seed:DEFAULT_OPT.seed;
 }
 
 //--------------------------------------
@@ -99,6 +107,10 @@ if( (options.base !== undefined) && ( ! options.base.match(/^[a-zA-Z0-9\.\-_\+/!
 if( (options.base !== undefined) && !(MIN_BASE_LEN <= options.base.length && options.base.length <= MAX_BASE_LEN) ){
   error(`-b, --base option is need between ${MIN_BASE_LEN} to ${MAX_BASE_LEN} string length`);
 }
+// --seed (is number)
+if( (options.seed !== undefined) && (! Number.isInteger( Number(options.seed) )) ){
+  error("--seed option is only integer.");
+}
 
 //--------------------------------------
 // Generate password
@@ -107,7 +119,8 @@ passwd.setOption({
     length: Number(options.length),
   strength: options.strength,
       base: options.base,
-    secure: options.secure
+    secure: options.secure,
+      seed: options.seed?  Number(options.seed):undefined
 });
 
 for(let i=0; i<options.item; i++){
